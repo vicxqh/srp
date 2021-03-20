@@ -5,6 +5,7 @@ import (
 	"io"
 	golog "log"
 	"os"
+	"strings"
 	"sync/atomic"
 )
 
@@ -57,6 +58,23 @@ func Init(path string) error {
 
 func SetLevel(l Level) {
 	atomic.StoreInt64((*int64)(&level), int64(l))
+}
+
+func SetLevelString(l string) {
+	var level Level
+	switch strings.ToLower(l) {
+	case "info":
+		level = LevelInfo
+	case "debug":
+		level = LevelDebug
+	case "warn", "warning":
+		level = LevelWarning
+	case "error", "err":
+		level = LevelError
+	default:
+		level = LevelInfo
+	}
+	SetLevel(level)
 }
 
 func leveledLog(l Level, fmt string, values ...interface{}) {

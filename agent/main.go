@@ -12,6 +12,7 @@ import (
 
 var (
 	logPath     string
+	logLevel    string
 	name        string
 	description string
 	server      string
@@ -19,6 +20,7 @@ var (
 
 func init() {
 	flag.StringVar(&logPath, "log", "", "log file path.")
+	flag.StringVar(&logLevel, "log-level", "info", "log level.[info|debug|warning|error]")
 	hostname, _ := os.Hostname()
 	flag.StringVar(&name, "name", hostname, "agent name(id)")
 	flag.StringVar(&description, "description", "", "more detailed description about this agent")
@@ -32,6 +34,7 @@ func main() {
 		fmt.Println("failed to init log file,", err)
 		os.Exit(1)
 	}
+	log.SetLevelString(logLevel)
 	if len(server) == 0 {
 		fmt.Println("server address is required")
 		os.Exit(1)
