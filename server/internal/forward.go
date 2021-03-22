@@ -77,7 +77,10 @@ func (a *agent) sendLoop() {
 		case data := <-a.sendChan:
 			log.Debug("user(%s) -> service(%s) : %d bytes", data.Header.User(), data.Header.Service(),
 				data.Header.PayloadLength())
-			a.conn.Send(data)
+			if err := a.conn.Send(data); err != nil {
+				a.cancel()
+				return
+			}
 		}
 	}
 }

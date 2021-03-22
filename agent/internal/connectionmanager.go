@@ -94,6 +94,7 @@ func GetConnection(header proto.Header) *serviceConnection {
 	if ok {
 		sc = scv.(*serviceConnection)
 	} else {
+		log.Info("creating new connection for %s", key)
 		conn, err := net.Dial("tcp", header.Service())
 		if err != nil {
 			log.Error("failed to dial to service %s, %v", header.Service(), err)
